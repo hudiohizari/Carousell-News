@@ -54,6 +54,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":common"))
     implementation(project(":data"))
     implementation(project(":domain"))
 
@@ -67,6 +68,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.coil.compose)
     implementation(libs.dagger.hilt)
+    implementation(libs.hilt.navigation.compose)
     implementation(platform(libs.androidx.compose.bom))
 
     ksp(libs.dagger.hilt.compiler)

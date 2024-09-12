@@ -17,13 +17,13 @@ import com.hizari.carouselltest.R
 
 @Preview
 @Composable
-fun PreviewDefaultErrorItemComposable() {
+fun PreviewDefaultErrorComposable() {
     Column {
-        DefaultErrorItemComposable()
+        DefaultErrorComposable()
         Spacer(modifier = Modifier.height(16.dp))
-        DefaultErrorItemComposable(message = "Some Error")
+        DefaultErrorComposable(message = "Some Error")
         Spacer(modifier = Modifier.height(16.dp))
-        DefaultErrorItemComposable(
+        DefaultErrorComposable(
             message = "Error....",
             onRetry = {  }
         )
@@ -31,7 +31,7 @@ fun PreviewDefaultErrorItemComposable() {
 }
 
 @Composable
-fun DefaultErrorItemComposable(
+fun DefaultErrorComposable(
     modifier: Modifier = Modifier,
     message: String = stringResource(id = R.string.something_went_wrong),
     messageColor: Color = Color.DarkGray,

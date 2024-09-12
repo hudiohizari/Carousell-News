@@ -10,16 +10,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-
+import com.hizari.carouselltest.ui.theme.Red
 
 @Preview
 @Composable
-fun PreviewDefaultLoadingItemComposable() {
-    DefaultLoadingItemComposable()
+fun PreviewDefaultLoadingComposable() {
+    DefaultLoadingComposable()
 }
 
 @Composable
-fun DefaultLoadingItemComposable(modifier: Modifier = Modifier) {
+fun DefaultLoadingComposable(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -28,6 +28,7 @@ fun DefaultLoadingItemComposable(modifier: Modifier = Modifier) {
     ) {
         CircularProgressIndicator(
             modifier = Modifier.size(48.dp),
+            color = Red,
             strokeWidth = 4.dp
         )
     }

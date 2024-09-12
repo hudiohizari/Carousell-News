@@ -26,42 +26,36 @@ data class News(
         }
 
         private fun getTimeAgo(context: Context, timeCreated: Long): String {
-            val now = System.currentTimeMillis() / 1000 // Current time in seconds
+            val now = System.currentTimeMillis() / 1000
             val diffInSeconds = now - timeCreated
 
-            val secondsInMinute = TimeUnit.MINUTES.toSeconds(1)
-            val secondsInHour = TimeUnit.HOURS.toSeconds(1)
-            val secondsInDay = TimeUnit.DAYS.toSeconds(1)
-            val secondsInWeek = TimeUnit.DAYS.toSeconds(7)
-            val secondsInMonth = 30 * secondsInDay
-            val secondsInYear = 365 * secondsInDay
+            val minutes = TimeUnit.SECONDS.toMinutes(diffInSeconds)
+            val hours = TimeUnit.SECONDS.toHours(diffInSeconds)
+            val days = TimeUnit.SECONDS.toDays(diffInSeconds)
+            val weeks = days / 7
+            val months = days / 30
+            val years = days / 365
 
             return when {
-                diffInSeconds >= secondsInYear -> {
-                    val years = diffInSeconds / secondsInYear
-                    context.resources.getQuantityString(R.plurals.years_ago, years.toInt(), years)
-                }
-                diffInSeconds >= secondsInMonth -> {
-                    val months = diffInSeconds / secondsInMonth
-                    context.resources.getQuantityString(R.plurals.months_ago, months.toInt(), months)
-                }
-                diffInSeconds >= secondsInWeek -> {
-                    val weeks = diffInSeconds / secondsInWeek
-                    context.resources.getQuantityString(R.plurals.weeks_ago, weeks.toInt(), weeks)
-                }
-                diffInSeconds >= secondsInDay -> {
-                    val days = diffInSeconds / secondsInDay
-                    context.resources.getQuantityString(R.plurals.days_ago, days.toInt(), days)
-                }
-                diffInSeconds >= secondsInHour -> {
-                    val hours = diffInSeconds / secondsInHour
-                    context.resources.getQuantityString(R.plurals.hours_ago, hours.toInt(), hours)
-                }
-                diffInSeconds >= secondsInMinute -> {
-                    val minutes = diffInSeconds / secondsInMinute
+                diffInSeconds < 60 -> context.getString(R.string.just_now)
+                minutes < 60 -> {
                     context.resources.getQuantityString(R.plurals.minutes_ago, minutes.toInt(), minutes)
                 }
-                else -> context.getString(R.string.just_now)
+                hours < 60 -> {
+                    context.resources.getQuantityString(R.plurals.hours_ago, hours.toInt(), hours)
+                }
+                days < 7 -> {
+                    context.resources.getQuantityString(R.plurals.days_ago, days.toInt(), days)
+                }
+                weeks < 4 -> {
+                    context.resources.getQuantityString(R.plurals.weeks_ago, weeks.toInt(), weeks)
+                }
+                months < 12 -> {
+                    context.resources.getQuantityString(R.plurals.months_ago, months.toInt(), months)
+                }
+                else -> {
+                    context.resources.getQuantityString(R.plurals.years_ago, years.toInt(), years)
+                }
             }
         }
     }

@@ -13,11 +13,11 @@ class GetNewsBasedOnPopularityUseCase(
     private val newsRepository: NewsRepository
 ) {
 
-    operator fun invoke(): Flow<Resources<List<News>?>> = flow {
+    operator fun invoke(): Flow<Resources<List<News>>> = flow {
         emit(Resources.Loading())
         try {
             val response = newsRepository.getNewsList()
-            val sortedResponse = response.sortedBy { it.rank }
+            val sortedResponse = response.sortedByDescending { it.rank }
             val mappedResponse = sortedResponse.map { News.from(context, it) }
 
             emit(Resources.Success(mappedResponse))
