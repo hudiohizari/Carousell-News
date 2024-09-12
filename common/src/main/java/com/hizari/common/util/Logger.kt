@@ -1,5 +1,6 @@
 package com.hizari.common.util
 
+import com.hizari.common.BuildConfig
 import com.hizari.common.extention.isNotNullOrEmpty
 import android.util.Log
 

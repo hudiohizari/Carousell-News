@@ -33,12 +33,24 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
+    debugImplementation(libs.chucker.debug)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.dagger.hilt)
     implementation(libs.material)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter)
+    implementation(libs.okhttp.interceptor)
+    implementation(project(":common"))
+    implementation(project(":domain"))
+
+    kapt(libs.dagger.hilt.compiler)
+
+    releaseImplementation(libs.chucker.release)
+
     testImplementation(libs.junit)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
