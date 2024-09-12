@@ -21,6 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Carousell Test"
 include(":app")
-include(":domain")
-include(":data")
-include(":common")
+ 
