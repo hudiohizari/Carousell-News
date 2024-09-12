@@ -44,7 +44,6 @@ object Logger {
         type: Type,
         message: String,
         tr: Throwable? = null,
-        toFirebase: Boolean = false
     ) {
         var formattedMessage = getWhereLogIsCalled()
         if (message.isNotNullOrEmpty()) formattedMessage += ": $message"

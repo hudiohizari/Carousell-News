@@ -1,7 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.symbol.processing)
+    alias(libs.plugins.google.dagger.hilt)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -64,7 +66,10 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.coil.compose)
+    implementation(libs.dagger.hilt)
     implementation(platform(libs.androidx.compose.bom))
+
+    ksp(libs.dagger.hilt.compiler)
 
     testImplementation(libs.junit)
 

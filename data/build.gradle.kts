@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.symbol.processing)
+    alias(libs.plugins.google.dagger.hilt)
 }
 
 android {
@@ -33,6 +34,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":common"))
+
     debugImplementation(libs.chucker.debug)
 
     implementation(libs.androidx.core.ktx)
@@ -42,9 +45,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter)
     implementation(libs.okhttp.interceptor)
-    implementation(project(":common"))
 
-    kapt(libs.dagger.hilt.compiler)
+    ksp(libs.dagger.hilt.compiler)
 
     releaseImplementation(libs.chucker.release)
 
