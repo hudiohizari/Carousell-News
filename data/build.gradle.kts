@@ -43,7 +43,6 @@ dependencies {
     implementation(libs.retrofit.converter)
     implementation(libs.okhttp.interceptor)
     implementation(project(":common"))
-    implementation(project(":domain"))
 
     kapt(libs.dagger.hilt.compiler)
 

@@ -1,8 +1,8 @@
 package com.hizari.data.di
 
 import com.hizari.data.network.service.NewsService
+import com.hizari.data.repository.NewsRepository
 import com.hizari.data.repository.NewsRepositoryImpl
-import com.hizari.domain.repository.NewsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

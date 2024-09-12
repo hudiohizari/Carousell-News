@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.dagger.hilt)
     implementation(libs.material)
     implementation(project(":common"))
+    implementation(project(":data"))
 
     kapt(libs.dagger.hilt.compiler)
 
