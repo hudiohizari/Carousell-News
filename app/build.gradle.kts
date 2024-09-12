@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    kotlin("kapt")
 }
 
 android {
@@ -50,7 +51,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":common"))
     implementation(project(":data"))
     implementation(project(":domain"))
 
