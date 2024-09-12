@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Carousell News</string>
     <string name="options">Options</string>
+    <string name="empty_data">No Data</string>
+    <string name="something_went_wrong">Something went wrong</string>
 </resources>
