@@ -1,7 +1,7 @@
 package com.hizari.data.repository
 
-import com.hizari.data.network.model.dto.NewsListDTO
+import com.hizari.data.network.model.dto.NewsDTO
 
 interface NewsRepository {
-    suspend fun getNewsList(): NewsListDTO
+    suspend fun getNewsList(): List<NewsDTO>
 }

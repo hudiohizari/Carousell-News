@@ -44,6 +44,7 @@ dependencies {
 
     ksp(libs.dagger.hilt.compiler)
 
+    testImplementation(libs.cash.turbine)
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.kotlin.test)

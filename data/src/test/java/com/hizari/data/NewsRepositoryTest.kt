@@ -1,7 +1,7 @@
 package com.hizari.data
 
 import android.content.Context
-import com.hizari.data.network.model.dto.NewsListDTO
+import com.hizari.data.network.model.dto.NewsDTO
 import com.hizari.data.network.service.NewsService
 import com.hizari.data.network.util.ApiException
 import com.hizari.data.repository.NewsRepositoryImpl
@@ -36,9 +36,10 @@ class NewsRepositoryTest {
         newsRepository.context = mockContext
     }
 
+    @Suppress("UNCHECKED_CAST")
     @Test
     fun `getNewsList should return NewsListDTO when API request is successful`() = runTest {
-        val mockResponse = mock(NewsListDTO::class.java)
+        val mockResponse = mock(List::class.java) as List<NewsDTO>
         `when`(mockNewsService.getNewsList()).thenReturn(Response.success(mockResponse))
 
         val result = newsRepository.getNewsList()
@@ -48,17 +49,18 @@ class NewsRepositoryTest {
 
     @Test
     fun `getNewsList should return empty NewsListDTO when API response is null`() = runTest {
-        `when`(mockNewsService.getNewsList()).thenReturn(Response.success(null))
+        val newsMock = listOf<NewsDTO>()
+        `when`(mockNewsService.getNewsList()).thenReturn(Response.success(newsMock))
 
         val result = newsRepository.getNewsList()
 
-        assertEquals(NewsListDTO(), result)
+        assertEquals(newsMock, result)
     }
 
     @Test
     fun `getNewsList should throw ApiException when API request fails 500`() = runTest {
         val errorJson = "500"
-        val errorResponse = Response.error<NewsListDTO>(500, errorJson.toResponseBody())
+        val errorResponse = Response.error<List<NewsDTO>>(500, errorJson.toResponseBody())
 
         `when`(mockContext.getString(R.string.server_down)).thenReturn("Server down")
         `when`(mockNewsService.getNewsList()).thenReturn(errorResponse)
