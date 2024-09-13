@@ -29,7 +29,10 @@ class MainViewModel @Inject constructor(
             mutableViewState.value = viewState.value.copy(newsResource = res)
         }.launchIn(viewModelScope)
 
-        mutableViewState.value = viewState.value.copy(loadNewsType = null)
+        mutableViewState.value = viewState.value.copy(
+            loadNewsType = null,
+            lastLoadNewsType = newsType
+        )
     }
 
 }

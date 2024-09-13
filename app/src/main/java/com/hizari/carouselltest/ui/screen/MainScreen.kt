@@ -1,6 +1,6 @@
 package com.hizari.carouselltest.ui.screen
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DropdownMenu
@@ -12,12 +12,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,10 +56,17 @@ fun MainScreenComposable(
 ) {
     val viewState by viewModel.viewState
 
+    val pullToRefreshState = rememberPullToRefreshState()
     var showDropDownMenu by remember { mutableStateOf(false) }
 
+    if (pullToRefreshState.isRefreshing) {
+        LaunchedEffect(Unit) { viewModel.loadNews(viewState.lastLoadNewsType) }
+    }
+
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(pullToRefreshState.nestedScrollConnection),
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -97,15 +109,19 @@ fun MainScreenComposable(
             )
         }
     ) { innerPadding ->
-        Column(modifier = modifier.padding(innerPadding)) {
+        Box(modifier = modifier.padding(innerPadding)) {
             when (viewState.newsResource) {
                 is Resources.Loading -> DefaultLoadingComposable(modifier = Modifier.padding(16.dp))
-                is Resources.Error -> DefaultErrorComposable(
-                    modifier = Modifier.padding(16.dp),
-                    message = viewState.newsResource.throwable?.message.orEmpty(),
-                    onRetry = { viewModel.loadNews(viewState.lastLoadNewsType) }
-                )
+                is Resources.Error -> {
+                    LaunchedEffect(Unit) { pullToRefreshState.endRefresh() }
+                    DefaultErrorComposable(
+                        modifier = Modifier.padding(16.dp),
+                        message = viewState.newsResource.throwable?.message.orEmpty(),
+                        onRetry = { viewModel.loadNews(viewState.lastLoadNewsType) }
+                    )
+                }
                 else -> {
+                    LaunchedEffect(Unit) { pullToRefreshState.endRefresh() }
                     val data = viewModel.viewState.value.newsResource.data.orEmpty()
                     if (data.isEmpty()) {
                         DefaultEmptyComposable(modifier = Modifier.padding(16.dp))
@@ -117,6 +133,11 @@ fun MainScreenComposable(
                     }
                 }
             }
+
+            PullToRefreshContainer(
+                state = pullToRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter),
+            )
         }
     }
 }

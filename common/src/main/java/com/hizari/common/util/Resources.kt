@@ -18,4 +18,12 @@ sealed class Resources<T>(val data: T?= null, val throwable: Throwable?= null) {
         return this is Error<*>
     }
 
+    fun isSuccess(): Boolean {
+        return this is Success<*>
+    }
+
+    fun isLoaded(): Boolean {
+        return !isLoading()
+    }
+
 }
