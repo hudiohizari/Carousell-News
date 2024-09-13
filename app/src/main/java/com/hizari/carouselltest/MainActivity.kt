@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun initApiCall() {
-        viewModel.loadNews(MainViewState.NewsType.Latest)
+        viewModel.loadNews(MainViewState.NewsType.Recent)
     }
 
     private fun initComposeView() {

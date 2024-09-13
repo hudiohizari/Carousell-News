@@ -80,10 +80,10 @@ fun MainScreenComposable(
                     ) {
                         DropdownMenuItem(
                             onClick = {
-                                viewModel.loadNews(MainViewState.NewsType.Latest)
+                                viewModel.loadNews(MainViewState.NewsType.Recent)
                                 showDropDownMenu = false
                             },
-                            text = { Text(stringResource(R.string.latest)) }
+                            text = { Text(stringResource(R.string.recent)) }
                         )
                         DropdownMenuItem(
                             onClick = {

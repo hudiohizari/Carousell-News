@@ -8,7 +8,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class GetNewsBasedOnLatestUseCase(
+class GetNewsBasedOnRecentUseCase(
     @ApplicationContext private val context: Context,
     private val newsRepository: NewsRepository
 ) {

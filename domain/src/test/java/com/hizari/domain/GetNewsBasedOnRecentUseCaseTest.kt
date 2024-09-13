@@ -6,7 +6,7 @@ import com.hizari.common.util.Resources
 import com.hizari.data.network.model.dto.NewsDTO
 import com.hizari.data.repository.NewsRepository
 import com.hizari.domain.model.News
-import com.hizari.domain.usecase.GetNewsBasedOnLatestUseCase
+import com.hizari.domain.usecase.GetNewsBasedOnRecentUseCase
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -19,9 +19,9 @@ import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import android.content.res.Resources as AndroidResources
 
-class GetNewsBasedOnLatestUseCaseTest {
+class GetNewsBasedOnRecentUseCaseTest {
 
-    private lateinit var getNewsBasedOnLatestUseCase: GetNewsBasedOnLatestUseCase
+    private lateinit var getNewsBasedOnRecentUseCase: GetNewsBasedOnRecentUseCase
 
     @Mock
     private lateinit var newsRepository: NewsRepository
@@ -35,7 +35,7 @@ class GetNewsBasedOnLatestUseCaseTest {
     @Before
     fun setUp() {
         MockitoAnnotations.openMocks(this)
-        getNewsBasedOnLatestUseCase = GetNewsBasedOnLatestUseCase(mockContext, newsRepository)
+        getNewsBasedOnRecentUseCase = GetNewsBasedOnRecentUseCase(mockContext, newsRepository)
     }
 
     @Test
@@ -51,7 +51,7 @@ class GetNewsBasedOnLatestUseCaseTest {
             `when`(mockContext.resources).thenReturn(mockAndroidResources)
             `when`(newsRepository.getNewsList()).thenReturn(newsDtoList)
 
-            getNewsBasedOnLatestUseCase().test {
+            getNewsBasedOnRecentUseCase().test {
                 assertIs<Resources.Loading<List<News>>>(awaitItem())
 
                 val sortedMappedNews = newsDtoList
@@ -72,7 +72,7 @@ class GetNewsBasedOnLatestUseCaseTest {
         `when`(newsRepository.getNewsList()).thenThrow(exception)
 
 
-        getNewsBasedOnLatestUseCase().test {
+        getNewsBasedOnRecentUseCase().test {
             assertIs<Resources.Loading<List<News>>>(awaitItem())
 
             awaitItem().let {

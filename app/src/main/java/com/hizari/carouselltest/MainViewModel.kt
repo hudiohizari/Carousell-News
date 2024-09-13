@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hizari.domain.usecase.GetNewsBasedOnLatestUseCase
+import com.hizari.domain.usecase.GetNewsBasedOnRecentUseCase
 import com.hizari.domain.usecase.GetNewsBasedOnPopularityUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getNewsBasedOnLatestUseCase: GetNewsBasedOnLatestUseCase,
+    private val getNewsBasedOnRecentUseCase: GetNewsBasedOnRecentUseCase,
     private val getNewsBasedOnPopularityUseCase: GetNewsBasedOnPopularityUseCase,
 ): ViewModel() {
 
@@ -23,7 +23,7 @@ class MainViewModel @Inject constructor(
     fun loadNews(newsType: MainViewState.NewsType?) {
         when (newsType) {
             null -> return
-            MainViewState.NewsType.Latest -> getNewsBasedOnLatestUseCase()
+            MainViewState.NewsType.Recent -> getNewsBasedOnRecentUseCase()
             MainViewState.NewsType.Popular -> getNewsBasedOnPopularityUseCase()
         }.onEach { res ->
             mutableViewState.value = viewState.value.copy(newsResource = res)

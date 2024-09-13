@@ -11,7 +11,7 @@ data class MainViewState(
 ) {
 
     enum class NewsType {
-        Latest, Popular,
+        Recent, Popular,
     }
 
 }

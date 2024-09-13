@@ -2,7 +2,7 @@ package com.hizari.carouselltest
 
 import com.hizari.common.util.Resources
 import com.hizari.domain.model.News
-import com.hizari.domain.usecase.GetNewsBasedOnLatestUseCase
+import com.hizari.domain.usecase.GetNewsBasedOnRecentUseCase
 import com.hizari.domain.usecase.GetNewsBasedOnPopularityUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
@@ -24,27 +24,27 @@ class MainViewModelTest {
     private lateinit var viewModel: MainViewModel
 
     @Mock
-    private lateinit var getNewsBasedOnLatestUseCase: GetNewsBasedOnLatestUseCase
+    private lateinit var getNewsBasedOnRecentUseCase: GetNewsBasedOnRecentUseCase
     @Mock
     private lateinit var getNewsBasedOnPopularityUseCase: GetNewsBasedOnPopularityUseCase
 
     @Before
     fun setup() {
         MockitoAnnotations.openMocks(this)
-        viewModel = MainViewModel(getNewsBasedOnLatestUseCase, getNewsBasedOnPopularityUseCase)
+        viewModel = MainViewModel(getNewsBasedOnRecentUseCase, getNewsBasedOnPopularityUseCase)
     }
 
     @Test
-    fun `loadNews Latest should update viewState with latest news`() = mainCoroutineRule.testScope.runTest {
-        val latestNews =  listOf(
+    fun `loadNews Recent should update viewState with recent news`() = mainCoroutineRule.testScope.runTest {
+        val recentNews =  listOf(
             News("Title 3", "Content 3", "Desc 3", "", "1 ago"),
             News("Title 2", "Content 2", "Desc 2", "", "3 ago"),
             News("Title 1", "Content 1", "Desc 1", "", "2 ago")
         )
-        val expectedResult = Resources.Success(latestNews)
-        `when`(getNewsBasedOnLatestUseCase()).thenReturn(flow { emit(expectedResult) })
+        val expectedResult = Resources.Success(recentNews)
+        `when`(getNewsBasedOnRecentUseCase()).thenReturn(flow { emit(expectedResult) })
 
-        viewModel.loadNews(MainViewState.NewsType.Latest)
+        viewModel.loadNews(MainViewState.NewsType.Recent)
 
         println("Expected result: $expectedResult")
         println("Actual result: ${viewModel.viewState.value.newsResource}")
@@ -74,11 +74,11 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `loadNews Latest should handle error`() = mainCoroutineRule.testScope.runTest {
+    fun `loadNews Recent should handle error`() = mainCoroutineRule.testScope.runTest {
         val errorResult = Resources.Error<List<News>>(Throwable("Failed to load news"))
-        `when`(getNewsBasedOnLatestUseCase()).thenReturn(flow { emit(errorResult) })
+        `when`(getNewsBasedOnRecentUseCase()).thenReturn(flow { emit(errorResult) })
 
-        viewModel.loadNews(MainViewState.NewsType.Latest)
+        viewModel.loadNews(MainViewState.NewsType.Recent)
 
         assertEquals(errorResult, viewModel.viewState.value.newsResource)
         assertEquals(null, viewModel.viewState.value.loadNewsType)

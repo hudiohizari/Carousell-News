@@ -2,7 +2,7 @@ package com.hizari.domain.di
 
 import android.content.Context
 import com.hizari.data.repository.NewsRepository
-import com.hizari.domain.usecase.GetNewsBasedOnLatestUseCase
+import com.hizari.domain.usecase.GetNewsBasedOnRecentUseCase
 import com.hizari.domain.usecase.GetNewsBasedOnPopularityUseCase
 import dagger.Module
 import dagger.Provides
@@ -15,19 +15,19 @@ import dagger.hilt.components.SingletonComponent
 object NewsModule {
 
     @Provides
+    fun provideGetNewsBasedOnRecentUseCase(
+        @ApplicationContext context: Context,
+        newsRepository: NewsRepository
+    ): GetNewsBasedOnRecentUseCase {
+        return GetNewsBasedOnRecentUseCase(context, newsRepository)
+    }
+
+    @Provides
     fun provideGetNewsBasedOnPopularityUseCase(
         @ApplicationContext context: Context,
         newsRepository: NewsRepository
     ): GetNewsBasedOnPopularityUseCase {
         return GetNewsBasedOnPopularityUseCase(context, newsRepository)
-    }
-
-    @Provides
-    fun provideGetNewsBasedOnLatestUseCase(
-        @ApplicationContext context: Context,
-        newsRepository: NewsRepository
-    ): GetNewsBasedOnLatestUseCase {
-        return GetNewsBasedOnLatestUseCase(context, newsRepository)
     }
 
 }
