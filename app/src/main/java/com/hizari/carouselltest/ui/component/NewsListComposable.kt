@@ -22,6 +22,7 @@ fun NewsListComposable(
     onItemClick: (News) -> Unit
 ) {
     val listState = rememberLazyListState()
+//    val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.refresh() })
 
     LazyColumn(
         modifier = modifier

@@ -39,9 +39,7 @@ dependencies {
     debugImplementation(libs.chucker.debug)
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
     implementation(libs.dagger.hilt)
-    implementation(libs.material)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter)
     implementation(libs.okhttp.interceptor)
