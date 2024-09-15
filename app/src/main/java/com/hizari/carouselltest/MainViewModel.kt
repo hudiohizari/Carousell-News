@@ -20,19 +20,30 @@ class MainViewModel @Inject constructor(
     private val mutableViewState = mutableStateOf(MainViewState())
     val viewState: MutableState<MainViewState> = mutableViewState
 
-    fun loadNews(newsType: MainViewState.NewsType?) {
+    fun loadNews(newsType: MainViewState.NewsType?, refreshing: Boolean = false) {
         when (newsType) {
             null -> return
             MainViewState.NewsType.Recent -> getNewsBasedOnRecentUseCase()
             MainViewState.NewsType.Popular -> getNewsBasedOnPopularityUseCase()
         }.onEach { res ->
-            mutableViewState.value = viewState.value.copy(newsResource = res)
-        }.launchIn(viewModelScope)
+            mutableViewState.value = when {
+                res.isLoading() -> viewState.value.copy(
+                    refreshing = refreshing,
+                    newsResource = res
+                )
+                else -> viewState.value.copy(
+                    refreshing = false,
+                    newsResource = res,
+                    loadNewsType = null,
+                    lastLoadNewsType = newsType
+                )
+            }
 
-        mutableViewState.value = viewState.value.copy(
-            loadNewsType = null,
-            lastLoadNewsType = newsType
-        )
+        }.launchIn(viewModelScope)
+    }
+
+    fun refresh() {
+        loadNews(newsType = viewState.value.lastLoadNewsType, refreshing = true)
     }
 
 }

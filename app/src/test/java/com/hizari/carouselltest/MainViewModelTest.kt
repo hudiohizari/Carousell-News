@@ -2,8 +2,8 @@ package com.hizari.carouselltest
 
 import com.hizari.common.util.Resources
 import com.hizari.domain.model.News
-import com.hizari.domain.usecase.GetNewsBasedOnRecentUseCase
 import com.hizari.domain.usecase.GetNewsBasedOnPopularityUseCase
+import com.hizari.domain.usecase.GetNewsBasedOnRecentUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
@@ -14,6 +14,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
+import kotlin.test.assertFalse
 
 @ExperimentalCoroutinesApi
 class MainViewModelTest {
@@ -36,7 +37,7 @@ class MainViewModelTest {
 
     @Test
     fun `loadNews Recent should update viewState with recent news`() = mainCoroutineRule.testScope.runTest {
-        val recentNews =  listOf(
+        val recentNews = listOf(
             News("Title 3", "Content 3", "Desc 3", "", "1 ago"),
             News("Title 2", "Content 2", "Desc 2", "", "3 ago"),
             News("Title 1", "Content 1", "Desc 1", "", "2 ago")
@@ -46,11 +47,10 @@ class MainViewModelTest {
 
         viewModel.loadNews(MainViewState.NewsType.Recent)
 
-        println("Expected result: $expectedResult")
-        println("Actual result: ${viewModel.viewState.value.newsResource}")
-
         assertEquals(expectedResult, viewModel.viewState.value.newsResource)
         assertEquals(null, viewModel.viewState.value.loadNewsType)
+        assertEquals(MainViewState.NewsType.Recent, viewModel.viewState.value.lastLoadNewsType)
+        assertFalse(viewModel.viewState.value.refreshing)
     }
 
     @Test
@@ -65,12 +65,10 @@ class MainViewModelTest {
 
         viewModel.loadNews(MainViewState.NewsType.Popular)
 
-        println("Expected result: $expectedResult")
-        println("Actual result: ${viewModel.viewState.value.newsResource}")
-
-
         assertEquals(expectedResult, viewModel.viewState.value.newsResource)
         assertEquals(null, viewModel.viewState.value.loadNewsType)
+        assertEquals(MainViewState.NewsType.Popular, viewModel.viewState.value.lastLoadNewsType)
+        assertFalse(viewModel.viewState.value.refreshing)
     }
 
     @Test
@@ -82,6 +80,8 @@ class MainViewModelTest {
 
         assertEquals(errorResult, viewModel.viewState.value.newsResource)
         assertEquals(null, viewModel.viewState.value.loadNewsType)
+        assertEquals(MainViewState.NewsType.Recent, viewModel.viewState.value.lastLoadNewsType)
+        assertFalse(viewModel.viewState.value.refreshing)
     }
 
     @Test
@@ -93,5 +93,45 @@ class MainViewModelTest {
 
         assertEquals(errorResult, viewModel.viewState.value.newsResource)
         assertEquals(null, viewModel.viewState.value.loadNewsType)
+        assertEquals(MainViewState.NewsType.Popular, viewModel.viewState.value.lastLoadNewsType)
+        assertFalse(viewModel.viewState.value.refreshing)
     }
+
+    @Test
+    fun `refresh should update viewState and reload last news type`() = mainCoroutineRule.testScope.runTest {
+        val recentNews = listOf(
+            News("Title 3", "Content 3", "Desc 3", "", "1 ago")
+        )
+        val expectedResult = Resources.Success(recentNews)
+        `when`(getNewsBasedOnRecentUseCase()).thenReturn(flow { emit(expectedResult) })
+
+        viewModel.loadNews(MainViewState.NewsType.Recent)
+
+        viewModel.refresh()
+
+        assertEquals(expectedResult, viewModel.viewState.value.newsResource)
+        assertFalse(viewModel.viewState.value.refreshing)
+        assertEquals(MainViewState.NewsType.Recent, viewModel.viewState.value.lastLoadNewsType)
+    }
+
+    @Test
+    fun `refresh should update viewState and handle error on last news type`() = mainCoroutineRule.testScope.runTest {
+        val errorResult = Resources.Error<List<News>>(Throwable("Failed to load news"))
+        val recentNews = listOf(
+            News("Title 3", "Content 3", "Desc 3", "", "1 ago")
+        )
+        val successResult = Resources.Success(recentNews)
+
+        `when`(getNewsBasedOnRecentUseCase()).thenReturn(flow { emit(successResult) })
+        viewModel.loadNews(MainViewState.NewsType.Recent)
+
+        `when`(getNewsBasedOnRecentUseCase()).thenReturn(flow { emit(errorResult) })
+        viewModel.refresh()
+
+        assertEquals(errorResult, viewModel.viewState.value.newsResource)
+        assertFalse(viewModel.viewState.value.refreshing)
+        assertEquals(MainViewState.NewsType.Recent, viewModel.viewState.value.lastLoadNewsType)
+    }
+
 }
+
