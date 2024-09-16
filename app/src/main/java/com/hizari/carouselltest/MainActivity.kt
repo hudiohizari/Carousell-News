@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import com.hizari.carouselltest.ui.screen.MainScreenComposable
+import com.hizari.carouselltest.ui.screen.MainScreen
 import com.hizari.carouselltest.ui.theme.CarousellTestTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CarousellTestTheme {
-                MainScreenComposable()
+                MainScreen()
             }
         }
     }

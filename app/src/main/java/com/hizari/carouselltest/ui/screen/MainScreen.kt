@@ -38,15 +38,15 @@ import com.hizari.common.util.Resources
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewMainScreenComposable() {
+fun PreviewMainScreen() {
     CarousellTestTheme {
-        MainScreenComposable()
+        MainScreen()
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreenComposable(
+fun MainScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel()
 ) {
