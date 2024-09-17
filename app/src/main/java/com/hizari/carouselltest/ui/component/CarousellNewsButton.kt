@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hizari.carouselltest.ui.theme.Gray
 import com.hizari.carouselltest.ui.theme.Red
 import com.hizari.carouselltest.ui.theme.White
 
@@ -63,49 +64,29 @@ fun CarousellNewsButton(
     composeItem: @Composable () -> Unit = {},
     isEnabled: Boolean = true
 ) {
-    if (isEnabled) {
-        Button(
-            modifier = modifier,
-            onClick = onClick,
-            colors = ButtonDefaults.buttonColors(containerColor = Red),
-            shape = RoundedCornerShape(
-                topStart = 64.dp,
-                topEnd = 64.dp,
-                bottomStart = 64.dp,
-                bottomEnd = 64.dp
+    Button(
+        modifier = modifier,
+        onClick = onClick,
+        enabled = isEnabled,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Red,
+            disabledContentColor = Gray
+        ),
+        shape = RoundedCornerShape(
+            topStart = 64.dp,
+            topEnd = 64.dp,
+            bottomStart = 64.dp,
+            bottomEnd = 64.dp
+        )
+    ) {
+        if (text.isEmpty()) {
+            composeItem()
+        } else {
+            Text(
+                modifier = Modifier.padding(vertical = 8.dp),
+                text = text,
+                color = Color.White
             )
-        ) {
-            if (text.isEmpty()) {
-                composeItem()
-            } else {
-                Text(
-                    modifier = Modifier.padding(vertical = 8.dp),
-                    text = text,
-                    color = Color.White
-                )
-            }
-        }
-    } else {
-        Button(
-            modifier = modifier,
-            onClick = { },
-            colors = ButtonDefaults.buttonColors(containerColor = Red),
-            shape = RoundedCornerShape(
-                topStart = 64.dp,
-                topEnd = 64.dp,
-                bottomStart = 64.dp,
-                bottomEnd = 64.dp
-            )
-        ) {
-            if (text.isEmpty()) {
-                composeItem()
-            } else {
-                Text(
-                    modifier = Modifier.padding(vertical = 8.dp),
-                    text = text,
-                    color = Color.White
-                )
-            }
         }
     }
 }
